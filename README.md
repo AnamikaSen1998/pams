@@ -68,3 +68,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+for running server
+in the server folder or main folder,create one  config.env file
+
+
+in config.env file 
+DATABASE=Your DB URL
+PORT=Your port no
+SECRET_KEY=any 16 charcters
