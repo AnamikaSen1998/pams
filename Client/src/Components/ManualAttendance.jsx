@@ -18,7 +18,7 @@ const ManualAttendance = () => {
 
   const history = useHistory();
 
-  const name = "Shauvik Paul"
+  
 
 
   const [values, setValues] = useState({
