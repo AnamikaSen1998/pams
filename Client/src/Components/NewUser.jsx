@@ -3,11 +3,14 @@ import React, { useState } from 'react'
 import Heading from './SubComponents/Heading'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {useHistory } from 'react-router-dom'
 import axios from "axios"
 
 import Swal from 'sweetalert2'
 
 const NewUser = () => {
+
+    const history = useHistory()
 
     const Id = "Ad" + Math.trunc(performance.now())
 
@@ -54,13 +57,14 @@ const NewUser = () => {
         })
 
         // window.alert(res.data.message)
-        if(res.status == 200){
+        if(res.status == 201){
             Swal.fire({
                 icon: 'success',
                 title: "Success",
                 text: res.data.message
 
             })
+            history.push("/")
         }else{
             Swal.fire({
                 icon: 'error',

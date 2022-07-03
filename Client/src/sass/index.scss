@@ -786,3 +786,24 @@ select option {
       transform : translateY(20px);
    }
 }
+
+
+.newwEmplSubmit{
+  background: #fff;
+  color: #148704;
+  border: 1px solid #148704;
+  width: 12%;
+  height: 38px;
+  border-radius: 6px;
+  box-shadow: 0px 8px 4px;
+}
+
+.newwEmplSubmit:hover{
+  background: #148704;
+  color: #fff;
+  border: 1px solid #148704;
+  width: 12%;
+  height: 38px;
+  border-radius: 6px;
+  box-shadow: none;
+}

@@ -77,7 +77,7 @@ const Sidebar = ({response}) => {
             <ul className="sub-menu">
               <li><NavLink className="link_name" to="#">Attendance</NavLink></li>
               <li><NavLink to="/viewattendance">View Attendance</NavLink></li>
-              <li><NavLink to="/attendance">Manual</NavLink></li>
+              {/* <li><NavLink to="/attendance">Manual</NavLink></li> */}
             </ul>
           </li>
           <li>
@@ -127,7 +127,7 @@ const Sidebar = ({response}) => {
             </div>
             <ul className="sub-menu">
               <li><NavLink className="link_name" to="#">Roles</NavLink></li>
-              <li><NavLink to="/viewrole">View Role</NavLink></li>
+              {/* <li><NavLink to="/viewrole">View Role</NavLink></li> */}
               <li><NavLink to="/addrole">Add Role</NavLink></li>
             </ul>
           </li>

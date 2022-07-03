@@ -468,12 +468,13 @@ const NewEmployee = () => {
 
 
 
+
                 {/* ---------------- Submit Button ------------- */}
 
                 <div className='me-5  empSubDiv '>
-                    <Button variant="contained" class="buttonDesign" href="#" className="mb-5 empSubBtn" onClick={addEmployee}>
+                   <button class="newwEmplSubmit" onClick={addEmployee}>
                         Submit
-                    </Button>
+                   </button>
                 </div>
 
 
