@@ -3,17 +3,23 @@ import Cards from './SubComponents/Cards';
 import { Backdrop, Box, Modal } from '@mui/material'
 import ReactECharts from 'echarts-for-react';
 import { getCount } from "../Apis/apis"
-import { getDashboardCount, getWorkingHours, getDashboardPending } from "../Apis/apis"
+import { getDashboardCount, getWorkingHours, getDashboardPending, changePassword, getAboutDetails } from "../Apis/apis"
+import {Button, FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, IconButton } from '@mui/material';
+import Swal from 'sweetalert2'
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Dashboard = () => {
 
   const [data, setData] = useState({})
   const [work, setWork] = useState([])
+  const [openMM, setOpenMM] = useState(false);
   const [open, setOpen] = useState(false);
   const [opens, setOpens] = useState(false);
   const handleClose = () => {
     setOpen(false)
     setOpens(false)
+    setOpenMM(false)
   }
 
   const style = {
@@ -31,6 +37,23 @@ const Dashboard = () => {
     p: 4,
     fontSize: 14,
   };
+
+
+  const styles = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 700,
+    bgcolor: 'background.paper',
+    borderLeft: '2px solid #000',
+    borderBottom: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '15px',
+
+  };
+
 
   const getDasboardTotal = async () => {
     const res = await getDashboardCount();
@@ -71,7 +94,7 @@ const Dashboard = () => {
 
   var name = []
   var values = []
-  // console.log(arrWorkHour);
+  console.log(arrWorkHour);
   const colorPalette = ['#198754', '#dc3545', '#ffc107', '#0d6efd', '#f2ac08', '#f20866', '#08d7f2', '#93f208', '#f20856b8', '#7dc2a2', '#24c799']  // green red yellow blue
 
   arrWorkHour.map((curr, index) => {
@@ -88,7 +111,7 @@ const Dashboard = () => {
   }
 
   const openWorkingHours = () => {
-    // console.log(120321);
+    console.log(120321);
     setOpen(true)
   }
   const openDeptLeave = () => {
@@ -246,7 +269,7 @@ const Dashboard = () => {
     ]
   };
 
-  
+
 
   const department = {
 
@@ -315,15 +338,15 @@ const Dashboard = () => {
   const [dashPending, setDashPending] = useState([])
   const getDashPending = async () => {
     const res = await getDashboardPending();
-    // console.log(res.data);
+    console.log(res.data);
     setDashPending(res.data)
   }
 
-  const dashPendingMap = dashPending.map((curr, index)=>{
+  const dashPendingMap = dashPending.map((curr, index) => {
     var count = 0;
     // console.log(curr);
-    curr.rounds.map((val,i)=>{
-      if(val==='Pending'){
+    curr.rounds.map((val, i) => {
+      if (val === 'Pending') {
         count = count + 1;
       }
     })
@@ -331,20 +354,20 @@ const Dashboard = () => {
     // console.log(curr._id);
     // console.log(count);
     return {
-      name : curr._id,
-      value : count
+      name: curr._id,
+      value: count
     }
   })
 
   var names = []
-  var valuess = []
+  var valuessMM = []
 
-  dashPendingMap.map((curr, index)=>{
+  dashPendingMap.map((curr, index) => {
     names.push(curr.name);
-    valuess.push({ 
-      value : curr.value,
+    valuessMM.push({
+      value: curr.value,
       itemStyle: {
-        color: colorPalette[index+1]
+        color: colorPalette[index + 1]
       }
     })
   })
@@ -379,7 +402,7 @@ const Dashboard = () => {
     series: [
       {
         // name: 'Leave Chart',
-        data: valuess,
+        data: valuessMM,
         type: 'bar',
         showBackground: true,
         backgroundStyle: {
@@ -392,6 +415,93 @@ const Dashboard = () => {
 
   console.log(dashPendingMap);
 
+  
+  const handleOpen = () => setOpenMM(true);
+  const [valMM, setvalMM] = useState({
+    password: '',
+    confirmPassword: '',
+    showPassword: false,
+    showConPassword: false
+});
+  
+  const handleChange = (prop) => (e) => {
+    setvalMM({
+        ...valMM,
+        [prop]: e.target.value
+    })
+}
+
+const handleClickShowPassword = () => {
+  setvalMM({
+        ...valMM,
+        showPassword: !valMM.showPassword,
+    });
+};
+const handleClickShowConPassword = () => {
+  setvalMM({
+        ...valMM,
+        showConPassword: !valMM.showConPassword,
+    });
+};
+
+const [list, setList] = useState({})
+
+const changeEmployeePassword = async () => {
+  const res = await getAboutDetails();
+  console.log(res.data);
+  setList(res.data)
+  console.log(54647);
+  console.log('====================================');
+  console.log(valMM.password);
+  console.log(valMM.confirmPassword);
+  console.log('====================================');
+  if (valMM.password != valMM.confirmPassword) {
+      Swal.fire({
+          icon: 'error',
+          title: "Error",
+          text: "Password and Confirm password must be same"
+
+      })
+  }else if(valMM.password == '' || valMM.confirmPassword == ''){
+    Swal.fire({
+      icon: 'error',
+      title: "Error",
+      text: "Password and Confirm password cannot be empty"
+  })
+  }
+   else {
+      const data = {
+          password: valMM.password,
+          type: "Admin",
+          _id: list._id
+      }
+      const response = await changePassword(data);
+      if (response.data.modifiedCount == 1) {
+          Swal.fire({
+              icon: 'success',
+              title: "Success",
+              text: "Password Changed"
+
+          })
+      } else {
+          Swal.fire({
+              icon: 'error',
+              title: "Error",
+              text: "Password cannot be changed"
+
+          })
+      }
+  }
+
+  setvalMM({
+    password: '',
+    confirmPassword: '',
+    showPassword: false,
+    showConPassword: false
+});
+  setOpenMM(false)
+}
+
   useEffect(() => {
     getCounts();
     getDasboardTotal();
@@ -402,6 +512,22 @@ const Dashboard = () => {
   return (
     <>
       <div className="container main_div mt-5 nempMain justify-content-center" >
+
+        <div className="row">
+          <div className="col-sm-6 col-md-6">
+            <div className="row">
+              <div className="col-sm-12 col-md-12">
+                <div className="dashTitle">
+                  <span className="wel">Welcome,</span> <h3>{window.localStorage.getItem('name')}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-6 col-md-6">
+            <button className="changePass" onClick={handleOpen}>Change Password</button>
+          </div>
+        </div>
+
 
         <div className="row">
 
@@ -483,6 +609,78 @@ const Dashboard = () => {
             </h5>
             <hr />
             <ReactECharts option={dashesPending} style={{ height: '450px', width: '100%' }} />
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openMM}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styles}>
+          <div className="row mt-2 form-group justify-content-center d-flex">
+            <label className="col-md-5 text-center mt-2  control-label"> Password : </label>
+            <div className="col-md-7 ">
+
+              <FormControl sx={{ width: '30ch' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                <OutlinedInput
+
+                  id="outlined-adornment-password"
+                  type={valMM.showPassword ? 'text' : 'password'}
+                  value={valMM.password}
+                  onChange={handleChange('password')}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {valMM.showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  fullWidth
+                  label="Password"
+                />
+              </FormControl>
+            </div>
+          </div>
+          <br />
+          <div className="row form-group justify-content-center d-flex">
+            <label className="col-md-5 text-center control-label">Confirm Password : </label>
+            <div className="col-md-7">
+
+              <FormControl sx={{ width: '30ch' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">Confirm Password</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={valMM.showConPassword ? 'text' : 'password'}
+                  value={valMM.confirmPassword}
+                  onChange={handleChange('confirmPassword')}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConPassword}
+                        edge="end"
+                      >
+                        {valMM.showConPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  fullWidth
+                  label="Confirm Password"
+                />
+              </FormControl>
+            </div>
+          </div>
+          <br />
+          <div className="d-flex justify-content-end me-5 pe-3">
+            <Button variant="contained" onClick={changeEmployeePassword} > Update </Button>
           </div>
         </Box>
       </Modal>

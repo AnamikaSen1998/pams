@@ -14,7 +14,7 @@ const EmployeeSidebar = ({response}) => {
       // window.localStorage.setItem("e",res.data.employeeID)
   }
 
-  aboutInfo();
+  // aboutInfo();
   const arrow = (e) => {
     let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
     arrowParent.classList.toggle("showMenu");
@@ -33,7 +33,7 @@ const EmployeeSidebar = ({response}) => {
   const [state, setState] = useState("")
 
   useEffect(() => {
-    setState(window.localStorage.getItem("id"));
+    // setState(window.localStorage.getItem("id"));
     aboutInfo();
   }, [])
   
@@ -101,7 +101,7 @@ const EmployeeSidebar = ({response}) => {
               <span className="link_name">Payroll</span>
             </NavLink>
             <ul className="sub-menu blank">
-              <li><NavLink className="link_name" to={`/employee/payroll/${window.localStorage.getItem("id")}`}>Payroll</NavLink></li>
+              <li><NavLink className="link_name" to={`/employee/payroll/${change._id}`}>Payroll</NavLink></li>
             </ul>
           </li>
         
